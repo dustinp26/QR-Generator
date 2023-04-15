@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gorillafied QR Generator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-3">Gorillafied QR Generator</h1>
+      <form>
+        <div class="form-group">
+          <label for="data">Data to encode:</label>
+          <input type="text" class="form-control" id="data" name="data">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="version">QR code version (1-40):</label>
+            <input type="number" class="form-control" id="version" name="version" min="1" max="40" value="1">
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="box-size">Box size (pixels):</label>
+            <input type="number" class="form-control" id="box-size" name="box-size" min="1" max="300" value="100">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="border">Border size (modules):</label>
+            <input type="number" class="form-control" id="border" name="border" min="0" max="10" value="4">
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="style">QR code style:</label>
+            <select class="form-control" id="style" name="style">
+              <option value="default">Default</option>
+              <option value="black-on-white">Black on White</option>
+              <option value="red-on-white">Red on White</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="generateQRCode()">Generate QR Code</button>
+      </form>
+
+      <hr>
+
+      <div id="qr-code"></div>
+      <button type="button" class="btn btn-primary"id="download-btn" onclick="downloadQRCode()">Download QR Code</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="qr_generator.js"></script>
+    <style>
+        .btn-primary {
+            background: #C62328;
+            border-color: #C62328;
+        }
+        .btn-primary:hover {
+            background: #a00c0f;
+        }
+        #download-btn {
+            display: none;
+        }
+    </style>
+  </body>
+</html>
