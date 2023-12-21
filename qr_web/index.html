@@ -1,59 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Gorillafied QR Generator</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="mt-3">Gorillafied QR Generator</h1>
-      <form>
-        <div class="form-group">
-          <label for="data">Data to encode:</label>
-          <input type="text" class="form-control" id="data" name="data">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="version">QR code version (1-40):</label>
-            <input type="number" class="form-control" id="version" name="version" min="1" max="40" value="1">
-          </div>
-
-          <div class="form-group col-md-6">
-            <label for="box-size">Box size (pixels):</label>
-            <input type="number" class="form-control" id="box-size" name="box-size" min="1" max="300" value="100">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="border">Border size (modules):</label>
-            <input type="number" class="form-control" id="border" name="border" min="0" max="10" value="4">
-          </div>
-
-          <div class="form-group col-md-6">
-            <label for="style">QR code style:</label>
-            <select class="form-control" id="style" name="style">
-              <option value="default">Default</option>
-              <option value="black-on-white">Black on White</option>
-              <option value="red-on-white">Red on White</option>
-            </select>
-          </div>
-        </div>
-
-        <button type="button" class="btn btn-primary" onclick="generateQRCode()">Generate QR Code</button>
-      </form>
-
-      <hr>
-
-      <div id="qr-code"></div>
-      <button type="button" class="btn btn-primary"id="download-btn" onclick="downloadQRCode()">Download QR Code</button>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <script src="qr_generator.js"></script>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
     <style>
         .btn-primary {
             background: #C62328;
@@ -64,7 +14,100 @@
         }
         #download-btn {
             display: none;
+            margin-top: 20px;
+        }
+        .form-container {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .custom-header {
+            background-color: #eaeaea;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
         }
     </style>
-  </body>
+</head>
+<body>
+  <div class="container">
+    <div class="custom-header text-center my-4">
+        <h1>Gorillafied QR Generator</h1>
+    </div>
+
+    <div class="form-container bg-light p-4 rounded-3 shadow">
+        <form>
+            <div class="mb-3">
+                <label for="data" class="form-label">Data to encode:</label>
+                <input type="text" class="form-control" id="data" name="data">
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="ver" class="form-label">QR code version (1-40):</label>
+                    <input type="number" class="form-control" id="ver" name="ver" min="1" max="40" value="1">
+                </div>
+                <div class="col-md-6">
+                    <label for="box-size" class="form-label">Box size (pixels):</label>
+                    <input type="number" class="form-control" id="box-size" name="box-size" min="1" max="300" value="100">
+                </div>
+            </div>
+
+            <div class="row g-3 mt-3">
+                <div class="col-md-6">
+                    <label for="embedded_image_path" class="form-label">Add Logo / Image to Center:</label>
+                    <input type="file" class="form-control" id="embedded_image_path" accept="image/*">
+                </div>
+                <div class="col-md-6">
+                    <label for="border" class="form-label">Border size (modules):</label>
+                    <input type="number" class="form-control" id="border" name="border" min="4" max="10" value="4">
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <label for="foreground-color" class="form-label">Foreground Color:</label>
+                <input type="color" id="foreground-color" value="#000000" name="foreground-color">
+                <label for="background-color" class="form-label ms-2">Background Color:</label>
+                <input type="color" id="background-color" value="#ffffff" name="background-color">
+                <button type="button" class="ms-2 btn btn-secondary" onclick="resetColors()">Reset Colors</button>
+            </div>
+
+            <!-- Since dot-shape feature is not implemented, this section is commented out
+            <div class="mt-3">
+                <label for="dot-shape" class="form-label">Dot Shape:</label>
+                <select id="dot-shape" class="form-select">
+                    <option value="square">Square</option>
+                    <option value="circle">Circle</option>
+                    <option value="star">Star</option>
+                </select>
+            </div>
+            -->
+
+            <div class="mt-3">
+                <label for="style" class="form-label">QR code style:</label>
+                <select class="form-select" id="style" name="style">
+                    <option value="default">Default</option>
+                    <option value="black-on-white">Black on White</option>
+                    <option value="red-on-white">Red on White</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary mt-3" onclick="generateQRCode()">Generate QR Code</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <div id="qr-code" class="text-center mt-4"></div>
+    <button type="button" class="btn btn-primary mt-3" id="download-btn" onclick="downloadQRCode()">Download QR Code</button>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+   <!-- Bootstrap 5 Bundle JS (includes Popper) -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="qr_generator.js"></script>
+</body>
 </html>
